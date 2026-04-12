@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="<%= lang %>">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>4Bax Pharmacy | <%= t('subtitle') %></title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body dir="<%= dir %>">
+  <%- include('partials/header') %>
+  <div class="glass-container">
+    <h1>
+      <span style="background: linear-gradient(135deg, #dc2626, #f97316); -webkit-background-clip: text; background-clip: text; color: transparent;">4</span>
+      <span style="background: linear-gradient(135deg, #10b981, #059669); -webkit-background-clip: text; background-clip: text; color: transparent;">Bax</span>
+      <span style="color: #1e293b;"> Pharmacy</span>
+      <span style="font-size: 1rem; color: #475569; display: block; margin-top: 0.5rem;">✨ <%= t('welcome') %></span>
+    </h1>
+    <p style="margin-bottom: 2rem; color: #334155;"><%= t('subtitle') %></p>
+
+    <div class="layout">
+      <!-- Filters sidebar -->
+      <aside class="filters-panel">
+        <div class="filter-group">
+          <h3>🏷️ <%= t('brands') %></h3>
+          <% brands.forEach(b => { %>
+            <label><input type="checkbox" class="brand-filter" value="<%= b._id %>"> <%= b.name %></label>
+          <% }) %>
+        </div>
+        <div class="filter-group">
+          <h3>🔬 <%= t('ingredients') %></h3>
+          <% ingredients.forEach(i => { %>
+            <label><input type="checkbox" class="ingredient-filter" value="<%= i._id %>"> <%= i.name %></label>
+          <% }) %>
+        </div>
+      </aside>
+
+      <!-- Products area -->
+      <main class="products-area">
+        <div style="margin-bottom: 1.5rem;">
+          <input type="text" id="searchInput" placeholder="🔍 <%= t('search_placeholder') %>" style="width: 100%; padding: 0.8rem; border-radius: 2rem; border: none; background: rgba(255,255,255,0.7); font-size: 1rem;">
+        </div>
+        <div id="productList"></div>
+        <div id="pagination"></div>
+      </main>
+    </div>
+  </div>
+
+  <div style="text-align: center; margin-top: 2rem;">
+    <a href="/cart" style="background: #1e293b; color: white; padding: 0.6rem 1.5rem; border-radius: 2rem; text-decoration: none;">🛍️ <%= t('view_cart') %></a>
+  </div>
+
+  <script src="/js/main.js"></script>
+</body>
+</html>

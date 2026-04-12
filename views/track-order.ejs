@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Track Order - 4Bax Pharmacy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <%- include('partials/header') %>
+  <div class="glass-container" style="max-width: 640px; margin: 2rem auto;">
+    <h1>🔍 Track Your Order</h1>
+    <form method="GET" action="/track" style="margin-bottom: 1.5rem;">
+      <input type="text" name="code" placeholder="Enter tracking code (e.g., 4BAX-ABC123)" value="<%= code || '' %>" style="width:100%; padding:0.8rem; margin-bottom:1rem; border-radius:1rem; border:1px solid rgba(148,163,184,.5);">
+      <button type="submit" class="btn" style="width:100%;">Track</button>
+    </form>
+    <% if (code && !order) { %>
+      <p style="color:red;">Order not found. Please check your tracking code.</p>
+    <% } %>
+    <% if (order) { %>
+      <div style="background: rgba(255,255,255,0.5); border-radius:1rem; padding:1.2rem;">
+        <p><strong>Tracking Code:</strong> <%= order.trackingCode %></p>
+        <p><strong>Status:</strong>
+          <% if (order.status === 'pending') { %>⏳ Pending
+          <% } else if (order.status === 'ready') { %>✅ Ready for pickup
+          <% } else { %>✔️ Completed<% } %>
+        </p>
+        <p><strong>Pickup Time:</strong> <%= order.pickupTime.toLocaleString() %></p>
+        <p><strong>Total:</strong> $<%= order.totalAmount %></p>
+        <p><strong>Phone:</strong> <%= order.phone %></p>
+        <% if (order.discountCode) { %>
+          <p><strong>Discount:</strong> <%= order.discountCode %> (-$<%= order.discountAmount.toFixed(2) %>)</p>
+        <% } %>
+        <% if (order.pointsRedeemed) { %>
+          <p><strong>Points Redeemed:</strong> $<%= order.pointsRedeemed.toFixed(2) %></p>
+        <% } %>
+        <div style="margin-top:1rem;">
+          <strong>Items:</strong>
+          <ul>
+            <% order.products.forEach(item => { %>
+              <li><%= item.product.name %> x<%= item.quantity %></li>
+            <% }) %>
+          </ul>
+        </div>
+      </div>
+    <% } %>
+  </div>
+</body>
+</html>

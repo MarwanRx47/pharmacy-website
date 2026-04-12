@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Product | Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    form input, form select, form textarea {
+      width: 100%;
+      margin-bottom: 1rem;
+      padding: 0.6rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 0.5rem;
+      font-family: inherit;
+    }
+  </style>
+</head>
+<body>
+  <%- include('../partials/header') %>
+<div class="glass-container admin-container">
+  <h1>➕ Add Product</h1>
+  <form action="/admin/add-product" method="POST" enctype="multipart/form-data" style="max-width: 600px;">
+    <input type="text" name="name" placeholder="Product name" required>
+    <select name="brand" required>
+      <option value="">Select Brand</option>
+      <% brands.forEach(b => { %>
+        <option value="<%= b._id %>"><%= b.name %></option>
+      <% }) %>
+    </select>
+    <select name="category">
+      <option value="cosmetic">Cosmetic</option>
+      <option value="supplement">Supplement</option>
+    </select>
+    <input type="number" name="price" placeholder="Price" required>
+    <input type="number" name="stock" placeholder="Stock">
+    <textarea name="description" placeholder="Description"></textarea>
+    <select name="ingredients" multiple>
+      <% ingredients.forEach(i => { %>
+        <option value="<%= i._id %>"><%= i.name %></option>
+      <% }) %>
+    </select>
+    <label style="display:block; margin-bottom:1rem;">Product image</label>
+    <input type="file" name="image" accept="image/*">
+    <button type="submit" style="background: #10b981;">✅ Add Product</button>
+  </form>
+  <div style="margin-top: 1rem;">
+    <a href="/admin" class="btn" style="width: auto; display: inline-block;">← Back</a>
+  </div>
+</div>
+</body>
+</html>

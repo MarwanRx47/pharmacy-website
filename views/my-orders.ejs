@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Orders</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <%- include('partials/header') %>
+  <div class="glass-container">
+    <h1>📦 My Orders</h1>
+    <% if (orders.length === 0) { %>
+      <p>You haven't placed any orders yet.</p>
+    <% } else { %>
+      <% orders.forEach(order => { %>
+        <div style="background: rgba(255,255,255,0.4); border-radius: 1rem; padding: 1rem; margin-bottom: 1.5rem;">
+          <p><strong>Order ID:</strong> <%= order._id %></p>
+          <p><strong>Tracking Code:</strong> <%= order.trackingCode %></p>
+          <p><strong>Pickup Time:</strong> <%= order.pickupTime.toLocaleString() %></p>
+          <p><strong>Status:</strong> 
+            <% if (order.status === 'pending') { %>⏳ Pending
+            <% } else if (order.status === 'ready') { %>✅ Ready for pickup
+            <% } else { %>✔️ Completed<% } %>
+          </p>
+          <p><strong>Total:</strong> $<%= order.totalAmount %></p>
+          <% if (order.discountAmount > 0) { %>
+            <p><strong>Discount:</strong> -$<%= order.discountAmount.toFixed(2) %></p>
+          <% } %>
+          <% if (order.pointsRedeemed > 0) { %>
+            <p><strong>Points redeemed:</strong> <%= order.pointsRedeemed %> points (-$<%= (order.pointsRedeemed / 100).toFixed(2) %>)</p>
+          <% } %>
+          <ul>
+            <% order.products.forEach(p => { %>
+              <li><%= p.product.name %> x <%= p.quantity %> - $<%= p.product.price * p.quantity %></li>
+            <% }) %>
+          </ul>
+        </div>
+      <% }) %>
+    <% } %>
+  </div>
+</body>
+</html>

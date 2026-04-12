@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="<%= lang %>">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= t('your_cart') %> | Pharmacy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body dir="<%= dir %>">
+  <%- include('partials/header') %>
+  <div class="glass-container">
+    <h1>🛒 <%= t('your_cart') %></h1>
+    <div id="cartItems" class="cart-items-list">
+      <p>Loading...</p>
+    </div>
+    
+    <div class="pickup-time">
+      <label>📅 <%= t('select_pickup_time') %></label>
+      <input type="datetime-local" id="pickupTime" required style="width: 100%; margin-top: 0.5rem;">
+    </div>
+    <div class="phone-input" style="margin-top: 1rem;">
+      <label>📞 <%= t('phone_required') %></label>
+      <input type="tel" id="phoneNumber" required placeholder="e.g., 555-123-4567" style="width:100%; margin-top:0.5rem; padding:0.6rem;">
+    </div>
+    <div class="discount-section" style="margin-top: 1rem;">
+      <label>🎟️ <%= t('discount_code') %></label>
+      <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
+        <input type="text" id="discountCode" placeholder="<%= t('discount_code') %>" style="flex:1; padding:0.6rem;">
+        <button id="applyDiscount" type="button" style="width:auto;"><%= t('apply') %></button>
+      </div>
+      <div id="discountMessage" style="margin-top:0.5rem; font-size:0.9rem;"></div>
+    </div>
+    <div class="points-section" style="margin-top: 1rem;">
+      <label>⭐ <%= t('loyalty_points') %>: <span id="userPoints">0</span></label>
+      <div style="margin-top:0.5rem;">
+        <label><input type="checkbox" id="usePoints"> <%= t('use_points') %></label>
+      </div>
+      <div id="pointsMessage" style="margin-top:0.5rem; font-size:0.9rem;"></div>
+    </div>
+    <div class="order-summary" style="margin-top: 1rem; background: rgba(255,255,255,0.4); border-radius:1rem; padding:1rem;">
+      <p><%= t('subtotal') %>: <strong id="orderSubtotal">$0.00</strong></p>
+      <p><%= t('discount') %>: <strong id="orderDiscount">$0.00</strong></p>
+      <p><%= t('points_saved') %>: <strong id="orderPoints">$0.00</strong></p>
+      <p><%= t('total') %>: <strong id="orderTotal">$0.00</strong></p>
+    </div>
+    <button id="placeOrder" style="background: #10b981;">✅ <%= t('place_order') %></button>
+    <div id="message" class="mt-4 text-center"></div>
+    <div class="mt-4 text-center">
+      <a href="/" class="btn" style="display: inline-block; width: auto; background: #64748b;">← <%= t('continue_shopping') %></a>
+    </div>
+  </div>
+  <script>
+    window.translations = {
+      cartEmpty: "<%= t('cart_empty') %>",
+      errorLoadingCart: "<%= t('error_loading_cart') %>",
+      pickupTimeRequired: "<%= t('pickup_time_required') %>",
+      phoneRequired: "<%= t('phone_required_alert') %>",
+      pointsInsufficient: "<%= t('points_insufficient') %>",
+      orderPlaced: "<%= t('order_placed') %>"
+    };
+  </script>
+  <script src="/js/main.js"></script>
+  <script src="/js/cart.js"></script>
+</body>
+</html>

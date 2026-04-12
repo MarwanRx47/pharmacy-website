@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="<%= lang %>">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Product</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    form input, form select, form textarea {
+      width: 100%;
+      margin-bottom: 1rem;
+      padding: 0.6rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 0.5rem;
+      font-family: inherit;
+    }
+    form img {
+      display: block;
+      max-width: 120px;
+      margin-bottom: 1rem;
+      border-radius: 0.75rem;
+      object-fit: cover;
+    }
+  </style>
+</head>
+<body dir="<%= dir %>">
+  <%- include('../partials/header') %>
+  <div class="glass-container admin-container">
+    <h1>✏️ Edit Product</h1>
+    <form action="/admin/edit-product/<%= product._id %>" method="POST" enctype="multipart/form-data" style="max-width: 600px;">
+      <input type="text" name="name" value="<%= product.name %>" required placeholder="Product name">
+      <select name="brand" required>
+        <option value="">Select Brand</option>
+        <% brands.forEach(b => { %>
+          <option value="<%= b._id %>" <%= product.brand._id.toString() === b._id.toString() ? 'selected' : '' %>><%= b.name %></option>
+        <% }) %>
+      </select>
+      <select name="category">
+        <option value="cosmetic" <%= product.category === 'cosmetic' ? 'selected' : '' %>>Cosmetic</option>
+        <option value="supplement" <%= product.category === 'supplement' ? 'selected' : '' %>>Supplement</option>
+      </select>
+      <input type="number" name="price" value="<%= product.price %>" required placeholder="Price">
+      <input type="number" name="stock" value="<%= product.stock %>" placeholder="Stock">
+      <textarea name="description" placeholder="Description"><%= product.description %></textarea>
+      <select name="ingredients" multiple>
+        <% ingredients.forEach(i => { %>
+          <option value="<%= i._id %>" <%= product.ingredients.some(ing => ing._id.toString() === i._id.toString()) ? 'selected' : '' %>><%= i.name %></option>
+        <% }) %>
+      </select>
+      <label style="display:block; margin-bottom:1rem;"><%= t('current_image') %>:</label>
+      <% if (product.imageUrl) { %>
+        <img src="<%= product.imageUrl %>" alt="Product image">
+        <div style="margin-bottom: 1rem;">
+          <label><input type="checkbox" name="removeImage" value="1"> <%= t('remove_image') %></label>
+        </div>
+      <% } %>
+      <input type="file" name="image" accept="image/*">
+      <button type="submit" style="background: #10b981;">✅ <%= t('update') %></button>
+    </form>
+    <div style="margin-top: 1rem;">
+      <a href="/admin" class="btn" style="width: auto; display: inline-block;">← Back</a>
+    </div>
+  </div>
+</body>
+</html>

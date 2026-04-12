@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <%- include('../partials/header') %>
+<div class="glass-container admin-container">
+  <h1>🔐 Admin Dashboard</h1>
+  <div style="display: flex; gap: 1rem; margin: 1rem 0;">
+    <a href="/admin/add-product" class="btn" style="width: auto;">➕ Add Product</a>
+    <a href="/admin/orders" class="btn" style="width: auto; background: #3b82f6;">📦 View Orders</a>
+    <a href="/auth/logout" class="btn" style="width: auto; background: #ef4444;">🚪 Logout</a>
+  </div>
+  <h2>Products List</h2>
+  <table class="admin-table">
+    <thead>
+      <tr><th>Name</th><th>Brand</th><th>Price</th><th>Stock</th><th>Category</th><th>Actions</th></tr>
+    </thead>
+    <tbody>
+      <% products.forEach(p => { %>
+        <tr>
+          <td><%= p.name %></td>
+          <td><%= p.brand.name %></td>
+          <td>$<%= p.price %></td>
+          <td><%= p.stock %></td>
+          <td><%= p.category %></td>
+          <td><a href="/admin/edit-product/<%= p._id %>" style="color:#2563eb;">Edit</a></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

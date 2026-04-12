@@ -1,0 +1,33 @@
+<nav class="navbar">
+  <div class="nav-brand">
+    <a href="/">
+      <span style="background: linear-gradient(135deg, #dc2626, #ef4444); -webkit-background-clip: text; background-clip: text; color: transparent; font-weight: 800;">4</span>
+      <span style="background: linear-gradient(135deg, #10b981, #34d399); -webkit-background-clip: text; background-clip: text; color: transparent; font-weight: 800;">Bax</span>
+      <span style="color: #1e293b;"> Pharmacy</span>
+    </a>
+  </div>
+  <div class="nav-links">
+    <a href="/"><%= t('home') %></a>
+    <a href="/cart">🛒 <%= t('cart') %> <span id="cartCount" class="cart-badge">0</span></a>
+    <a href="/track">🔍 <%= t('track_order') %></a>
+    <% if (typeof user !== 'undefined' && user) { %>
+      <a href="/my-orders">📋 <%= t('my_orders') %></a>
+    <% } %>
+    <% if (typeof user !== 'undefined' && user && user.isAdmin) { %>
+      <a href="/admin">📊 <%= t('admin') %></a>
+    <% } %>
+    <% if (typeof user !== 'undefined' && user) { %>
+      <a href="/auth/logout">🚪 <%= t('logout') %> (<%= user.email %>)</a>
+    <% } else { %>
+      <a href="/auth/login">🔐 <%= t('login') %></a>
+      <a href="/auth/register">📝 <%= t('register') %></a>
+    <% } %>
+    <div class="lang-switcher">
+      <select id="langSelect">
+        <option value="en" <%= lang === 'en' ? 'selected' : '' %>>English</option>
+        <option value="ar" <%= lang === 'ar' ? 'selected' : '' %>>العربية</option>
+        <option value="ckb" <%= lang === 'ckb' ? 'selected' : '' %>>کوردی</option>
+      </select>
+    </div>
+  </div>
+</nav>

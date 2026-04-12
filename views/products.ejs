@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Products</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Product Listing</h1>
+    <div class="product-grid">
+      <% products.forEach(p => { %>
+        <div class="product-card">
+          <img src="<%= p.imageUrl || '/images/placeholder.jpg' %>" alt="<%= p.name %>">
+          <h3><%= p.name %></h3>
+          <p>Brand: <%= p.brand.name %></p>
+          <p>Price: $<%= p.price %></p>
+          <p>Stock: <%= p.stock %></p>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+</body>
+</html>
