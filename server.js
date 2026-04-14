@@ -4,12 +4,35 @@ const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const path = require('path');
 const connectDB = require('./config/db');
+const bcrypt = require('bcryptjs');
+const User = require('./models/User');
 const { i18nMiddleware } = require('./middleware/i18n');
 
 const app = express();
 
-// Database connection
-connectDB();
+// Database connection and default admin creation
+const initServer = async () => {
+  await connectDB();
+
+  const adminEmails = process.env.ADMIN_EMAILS
+    ? process.env.ADMIN_EMAILS.split(',').map(email => email.trim().toLowerCase()).filter(Boolean)
+    : [];
+  const defaultPassword = process.env.DEFAULT_ADMIN_PASSWORD || 'admin123';
+
+  for (const email of adminEmails) {
+    const existing = await User.findOne({ email });
+    if (!existing) {
+      const hashed = await bcrypt.hash(defaultPassword, 10);
+      await User.create({
+        email,
+        password: hashed,
+        name: email.split('@')[0],
+        isAdmin: true
+      });
+      console.log(`✅ Created admin: ${email} (password: ${defaultPassword})`);
+    }
+  }
+};
 
 // Middleware
 app.use(express.urlencoded({ extended: true }));
@@ -55,8 +78,15 @@ app.use('/admin', require('./routes/admin'));
 app.use('/auth', require('./routes/auth'));
 app.use('/orders', require('./routes/orders'));
 
-// Start server
+// Start server after DB and admin initialization
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
-});
+initServer()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`🚀 Server running on http://localhost:${PORT}`);
+    });
+  })
+  .catch(err => {
+    console.error('Failed to initialize server:', err);
+    process.exit(1);
+  });

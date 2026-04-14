@@ -44,8 +44,17 @@ router.get('/register', (req, res) => {
 
 router.post('/register', async (req, res) => {
   const { email, password, name } = req.body;
+  const existing = await User.findOne({ email });
+  if (existing) {
+    return res.send('Email already registered');
+  }
+
   const hashed = await bcrypt.hash(password, 10);
-  const isAdmin = (email === process.env.ADMIN_EMAIL);
+  const adminEmails = process.env.ADMIN_EMAILS
+    ? process.env.ADMIN_EMAILS.split(',').map(e => e.trim().toLowerCase()).filter(Boolean)
+    : [];
+  const isAdmin = adminEmails.includes(email.trim().toLowerCase());
+
   const user = new User({ email, password: hashed, name, isAdmin });
   await user.save();
   res.redirect('/auth/login');
