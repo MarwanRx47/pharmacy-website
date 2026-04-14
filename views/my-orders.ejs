@@ -1,42 +1,110 @@
 <!DOCTYPE html>
-<html>
+<html lang="<%= lang %>" dir="<%= dir %>">
 <head>
-  <title>My Orders</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= t('my_orders') %> | 4Bax Pharmacy</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .order-card {
+      background: rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(4px);
+      border-radius: 1.5rem;
+      padding: 1.2rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid rgba(255,255,255,0.6);
+      transition: transform 0.2s;
+    }
+    .order-card:hover {
+      transform: translateY(-2px);
+      background: rgba(255,255,255,0.6);
+    }
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+      padding-bottom: 0.5rem;
+      margin-bottom: 0.8rem;
+    }
+    .status-badge {
+      display: inline-block;
+      padding: 0.2rem 0.8rem;
+      border-radius: 2rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    .status-pending { background: #fef3c7; color: #b45309; }
+    .status-ready { background: #d1fae5; color: #065f46; }
+    .status-completed { background: #dbeafe; color: #1e40af; }
+    .order-products {
+      margin: 0.8rem 0;
+      padding-left: 1rem;
+    }
+    .order-products li {
+      margin-bottom: 0.3rem;
+    }
+    @media (max-width: 600px) {
+      .order-header {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+    }
+  </style>
 </head>
-<body>
+<body dir="<%= dir %>">
   <%- include('partials/header') %>
   <div class="glass-container">
-    <h1>📦 My Orders</h1>
-    <% if (orders.length === 0) { %>
-      <p>You haven't placed any orders yet.</p>
-    <% } else { %>
+    <h1><%= t('order_history') %></h1>
+    <% if (orders && orders.length > 0) { %>
       <% orders.forEach(order => { %>
-        <div style="background: rgba(255,255,255,0.4); border-radius: 1rem; padding: 1rem; margin-bottom: 1.5rem;">
-          <p><strong>Order ID:</strong> <%= order._id %></p>
-          <p><strong>Tracking Code:</strong> <%= order.trackingCode %></p>
-          <p><strong>Pickup Time:</strong> <%= order.pickupTime.toLocaleString() %></p>
-          <p><strong>Status:</strong> 
-            <% if (order.status === 'pending') { %>⏳ Pending
-            <% } else if (order.status === 'ready') { %>✅ Ready for pickup
-            <% } else { %>✔️ Completed<% } %>
-          </p>
-          <p><strong>Total:</strong> $<%= order.totalAmount %></p>
-          <% if (order.discountAmount > 0) { %>
-            <p><strong>Discount:</strong> -$<%= order.discountAmount.toFixed(2) %></p>
-          <% } %>
-          <% if (order.pointsRedeemed > 0) { %>
-            <p><strong>Points redeemed:</strong> <%= order.pointsRedeemed %> points (-$<%= (order.pointsRedeemed / 100).toFixed(2) %>)</p>
-          <% } %>
-          <ul>
-            <% order.products.forEach(p => { %>
-              <li><%= p.product.name %> x <%= p.quantity %> - $<%= p.product.price * p.quantity %></li>
+        <div class="order-card">
+          <div class="order-header">
+            <div>
+              <strong><%= t('order_id') %>:</strong> <%= order._id.toString().slice(-8) %><br>
+              <strong><%= t('tracking_code') %>:</strong> 
+              <span style="font-family: monospace; background: rgba(0,0,0,0.05); padding: 0.2rem 0.4rem; border-radius: 0.5rem;"><%= order.trackingCode %></span>
+            </div>
+            <div>
+              <strong><%= t('status') %>:</strong> 
+              <span class="status-badge status-<%= order.status %>">
+                <% if (order.status === 'pending') { %><%= t('pending') %>
+                <% } else if (order.status === 'ready') { %><%= t('ready') %>
+                <% } else { %><%= t('completed') %><% } %>
+              </span>
+            </div>
+          </div>
+          <div>
+            <strong><%= t('pickup_time') %>:</strong> <%= new Date(order.pickupTime).toLocaleString() %>
+          </div>
+          <div>
+            <strong><%= t('phone') %>:</strong> <%= order.phone %>
+          </div>
+          <ul class="order-products">
+            <% order.products.forEach(item => { %>
+              <li>• <%= item.product.name %> x <%= item.quantity %> – $<%= (item.product.price * item.quantity).toFixed(2) %></li>
             <% }) %>
           </ul>
+          <div style="margin-top: 0.5rem;">
+            <strong><%= t('subtotal') %>:</strong> $<%= (order.totalAmount + (order.discountAmount || 0) + (order.pointsRedeemed || 0)).toFixed(2) %><br>
+            <% if (order.discountAmount > 0) { %>
+              <strong><%= t('discount') %>:</strong> -$<%= order.discountAmount.toFixed(2) %><br>
+            <% } %>
+            <% if (order.pointsRedeemed > 0) { %>
+              <strong><%= t('points_saved') %>:</strong> -$<%= (order.pointsRedeemed / 100).toFixed(2) %><br>
+            <% } %>
+            <strong><%= t('total') %>:</strong> <span style="font-size: 1.2rem; color: #2563eb;">$<%= order.totalAmount.toFixed(2) %></span>
+          </div>
         </div>
       <% }) %>
+    <% } else { %>
+      <p style="text-align: center; padding: 2rem;"><%= t('no_orders') %></p>
+      <div style="text-align: center;">
+        <a href="/" class="btn" style="display: inline-block; width: auto;"><%= t('continue_shopping') %></a>
+      </div>
     <% } %>
   </div>
+  <script src="/js/main.js"></script>
 </body>
 </html>

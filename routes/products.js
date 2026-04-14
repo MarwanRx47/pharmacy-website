@@ -38,9 +38,20 @@ router.get('/api/filter', async (req, res) => {
     const limit = parseInt(req.query.limit) || 9;
     const skip = (page - 1) * limit;
     
+    let sortOption = {};
+    switch (req.query.sort) {
+      case 'name_asc': sortOption = { name: 1 }; break;
+      case 'name_desc': sortOption = { name: -1 }; break;
+      case 'price_asc': sortOption = { price: 1 }; break;
+      case 'price_desc': sortOption = { price: -1 }; break;
+      case 'brand_asc': sortOption = { brand: 1 }; break;
+      default: sortOption = { name: 1 };
+    }
+    
     const products = await Product.find(query)
       .populate('brand')
       .populate('ingredients')
+      .sort(sortOption)
       .skip(skip)
       .limit(limit);
     const total = await Product.countDocuments(query);
@@ -51,6 +62,26 @@ router.get('/api/filter', async (req, res) => {
       totalPages: Math.ceil(total / limit),
       total
     });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Get all brands (for dynamic filter loading)
+router.get('/api/brands', async (req, res) => {
+  try {
+    const brands = await Brand.find();
+    res.json(brands);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Get all ingredients (for dynamic filter loading)
+router.get('/api/ingredients', async (req, res) => {
+  try {
+    const ingredients = await Ingredient.find();
+    res.json(ingredients);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -225,12 +256,19 @@ router.get('/api/product/:id', async (req, res) => {
 
 // Customer order history
 router.get('/my-orders', async (req, res) => {
-  if (!req.session.userId) return res.redirect('/auth/login');
-  const Order = require('../models/Order');
-  const orders = await Order.find({ user: req.session.userId })
-    .populate('products.product')
-    .sort({ createdAt: -1 });
-  res.render('my-orders', { orders });
+  if (!req.session.userId) {
+    return res.redirect('/auth/login');
+  }
+  try {
+    const Order = require('../models/Order');
+    const orders = await Order.find({ user: req.session.userId })
+      .populate('products.product')
+      .sort({ createdAt: -1 });
+    res.render('my-orders', { orders });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
 });
 
 module.exports = router;

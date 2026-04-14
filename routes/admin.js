@@ -103,4 +103,68 @@ router.post('/orders/update', isAdmin, async (req, res) => {
   res.redirect('/admin/orders');
 });
 
+// ========== BRANDS ==========
+router.get('/brands', isAdmin, async (req, res) => {
+  try {
+    const brands = await Brand.find();
+    res.render('admin/brands', { brands });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error loading brands');
+  }
+});
+
+router.post('/brands/add', isAdmin, async (req, res) => {
+  try {
+    const { name, description } = req.body;
+    await Brand.create({ name, description });
+    res.redirect('/admin/brands');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error adding brand');
+  }
+});
+
+router.get('/brands/delete/:id', isAdmin, async (req, res) => {
+  try {
+    await Brand.findByIdAndDelete(req.params.id);
+    res.redirect('/admin/brands');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error deleting brand');
+  }
+});
+
+// ========== INGREDIENTS ==========
+router.get('/ingredients', isAdmin, async (req, res) => {
+  try {
+    const ingredients = await Ingredient.find();
+    res.render('admin/ingredients', { ingredients });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error loading ingredients');
+  }
+});
+
+router.post('/ingredients/add', isAdmin, async (req, res) => {
+  try {
+    const { name } = req.body;
+    await Ingredient.create({ name });
+    res.redirect('/admin/ingredients');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error adding ingredient');
+  }
+});
+
+router.get('/ingredients/delete/:id', isAdmin, async (req, res) => {
+  try {
+    await Ingredient.findByIdAndDelete(req.params.id);
+    res.redirect('/admin/ingredients');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error deleting ingredient');
+  }
+});
+
 module.exports = router;

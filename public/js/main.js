@@ -8,7 +8,7 @@
     };
   }
 
-  let currentBrands = [], currentIngredients = [], currentSearch = '', currentPage = 1;
+  let currentBrands = [], currentIngredients = [], currentSearch = '', currentPage = 1, currentSort = 'name_asc';
   const itemsPerPage = 9;
   let currentController = null;
 
@@ -27,16 +27,49 @@
 
   window.updateCartCount = updateCartCount;
 
+  // Load filters from API
+  async function loadFilters() {
+    try {
+      const [brandsRes, ingredientsRes] = await Promise.all([
+        fetch('/api/brands'),
+        fetch('/api/ingredients')
+      ]);
+      const brands = await brandsRes.json();
+      const ingredients = await ingredientsRes.json();
+      
+      const brandsHtml = brands.map(b => `<label><input type="checkbox" class="brand-filter" value="${b._id}"> ${escapeHtml(b.name)}</label>`).join('');
+      const ingredientsHtml = ingredients.map(i => `<label><input type="checkbox" class="ingredient-filter" value="${i._id}"> ${escapeHtml(i.name)}</label>`).join('');
+      
+      document.getElementById('brandsContainer').innerHTML += brandsHtml;
+      document.getElementById('ingredientsContainer').innerHTML += ingredientsHtml;
+      
+      // Attach filter listeners after loading
+      attachFilterListeners();
+    } catch (err) {
+      console.error('Failed to load filters', err);
+    }
+  }
+
+  function attachFilterListeners() {
+    const debouncedFilter = debounce(() => {
+      currentBrands = Array.from(document.querySelectorAll('.brand-filter:checked')).map(cb => cb.value);
+      currentIngredients = Array.from(document.querySelectorAll('.ingredient-filter:checked')).map(cb => cb.value);
+      resetAndFetch();
+    }, 150);
+    document.querySelectorAll('.brand-filter, .ingredient-filter').forEach(cb => {
+      cb.removeEventListener('change', debouncedFilter);
+      cb.addEventListener('change', debouncedFilter);
+    });
+  }
+
   async function fetchAndDisplayProducts(page = 1) {
-    console.log('Fetching products with params:', { page, brands: currentBrands, ingredients: currentIngredients, search: currentSearch });
     if (currentController) currentController.abort();
     currentController = new AbortController();
     currentPage = page;
 
-    // disable pagination buttons
     document.querySelectorAll('.pagination button').forEach(btn => btn.disabled = true);
 
-    let url = `/api/filter?page=${page}&limit=${itemsPerPage}`;
+    let url = `/api/filter?page=${page}&limit=${itemsPerPage}&sort=${currentSort}`;
     if (currentBrands.length) url += `&brands=${currentBrands.join(',')}`;
     if (currentIngredients.length) url += `&ingredients=${currentIngredients.join(',')}`;
     if (currentSearch) url += `&search=${encodeURIComponent(currentSearch)}`;
@@ -115,6 +148,7 @@
   }
 
   function escapeHtml(str) {
+    if (!str) return '';
     return str.replace(/[&<>]/g, function(m) {
       if (m === '&') return '&amp;';
       if (m === '<') return '&lt;';
@@ -133,20 +167,19 @@
     searchInput.addEventListener('input', debouncedSearch);
   }
 
-  // Filters
-  const debouncedFilter = debounce(() => {
-    currentBrands = Array.from(document.querySelectorAll('.brand-filter:checked')).map(cb => cb.value);
-    currentIngredients = Array.from(document.querySelectorAll('.ingredient-filter:checked')).map(cb => cb.value);
-    resetAndFetch();
-  }, 150);
+  // Sorting
+  const sortSelect = document.getElementById('sortBy');
+  if (sortSelect) {
+    sortSelect.addEventListener('change', (e) => {
+      currentSort = e.target.value;
+      resetAndFetch();
+    });
+  }
 
-  const brandCheckboxes = document.querySelectorAll('.brand-filter');
-  const ingredientCheckboxes = document.querySelectorAll('.ingredient-filter');
-  brandCheckboxes.forEach(cb => cb.addEventListener('change', debouncedFilter));
-  ingredientCheckboxes.forEach(cb => cb.addEventListener('change', debouncedFilter));
-
-  // Initial fetch – only once
-  fetchAndDisplayProducts();
+  // Load filters then initial fetch
+  loadFilters().then(() => {
+    fetchAndDisplayProducts();
+  });
 
   window.addToCart = async (productId) => {
     try {

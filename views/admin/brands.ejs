@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Brands</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .manage-form {
+      background: rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(4px);
+      padding: 1.5rem;
+      border-radius: 1.5rem;
+      margin-bottom: 2rem;
+      border: 1px solid rgba(255,255,255,0.6);
+    }
+    .manage-form input, .manage-form button {
+      margin-right: 0.5rem;
+    }
+    .manage-list {
+      background: rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(4px);
+      padding: 1.5rem;
+      border-radius: 1.5rem;
+      border: 1px solid rgba(255,255,255,0.6);
+    }
+    .manage-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.8rem;
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+    }
+    .delete-btn {
+      background: #ef4444;
+      color: white;
+      border: none;
+      padding: 0.3rem 0.6rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    .back-link {
+      display: inline-block;
+      margin-top: 1rem;
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <%- include('../partials/header') %>
+  <div class="glass-container">
+    <h1>🏷️ Manage Brands</h1>
+    
+    <div class="manage-form">
+      <h2>Add New Brand</h2>
+      <form action="/admin/brands/add" method="POST" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+        <input type="text" name="name" placeholder="Brand name" required style="flex: 1; min-width: 150px; padding: 0.6rem; border-radius: 0.5rem; border: none;">
+        <input type="text" name="description" placeholder="Description" style="flex: 1; min-width: 150px; padding: 0.6rem; border-radius: 0.5rem; border: none;">
+        <button type="submit" class="btn" style="width: auto;">➕ Add Brand</button>
+      </form>
+    </div>
+
+    <div class="manage-list">
+      <h2>Existing Brands</h2>
+      <% if (brands.length === 0) { %>
+        <p>No brands yet. Add your first brand above!</p>
+      <% } else { %>
+        <ul style="list-style: none; padding: 0; margin: 0;">
+          <% brands.forEach(b => { %>
+            <li>
+              <div>
+                <strong><%= b.name %></strong>
+                <% if (b.description) { %><br><small style="color: #666;"><%= b.description %></small><% } %>
+              </div>
+              <a href="/admin/brands/delete/<%= b._id %>" onclick="return confirm('Delete this brand?');" class="delete-btn">❌ Delete</a>
+            </li>
+          <% }) %>
+        </ul>
+      <% } %>
+    </div>
+
+    <a href="/admin" class="back-link">← Back to Dashboard</a>
+  </div>
+</body>
+</html>

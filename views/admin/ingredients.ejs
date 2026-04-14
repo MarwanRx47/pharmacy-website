@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Ingredients</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .manage-form {
+      background: rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(4px);
+      padding: 1.5rem;
+      border-radius: 1.5rem;
+      margin-bottom: 2rem;
+      border: 1px solid rgba(255,255,255,0.6);
+    }
+    .manage-form input, .manage-form button {
+      margin-right: 0.5rem;
+    }
+    .manage-list {
+      background: rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(4px);
+      padding: 1.5rem;
+      border-radius: 1.5rem;
+      border: 1px solid rgba(255,255,255,0.6);
+    }
+    .manage-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.8rem;
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+    }
+    .delete-btn {
+      background: #ef4444;
+      color: white;
+      border: none;
+      padding: 0.3rem 0.6rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    .back-link {
+      display: inline-block;
+      margin-top: 1rem;
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <%- include('../partials/header') %>
+  <div class="glass-container">
+    <h1>🔬 Manage Ingredients</h1>
+    
+    <div class="manage-form">
+      <h2>Add New Ingredient</h2>
+      <form action="/admin/ingredients/add" method="POST" style="display: flex; gap: 0.5rem;">
+        <input type="text" name="name" placeholder="Ingredient name" required style="flex: 1; padding: 0.6rem; border-radius: 0.5rem; border: none;">
+        <button type="submit" class="btn" style="width: auto;">➕ Add Ingredient</button>
+      </form>
+    </div>
+
+    <div class="manage-list">
+      <h2>Existing Ingredients</h2>
+      <% if (ingredients.length === 0) { %>
+        <p>No ingredients yet. Add your first ingredient above!</p>
+      <% } else { %>
+        <ul style="list-style: none; padding: 0; margin: 0;">
+          <% ingredients.forEach(i => { %>
+            <li>
+              <strong><%= i.name %></strong>
+              <a href="/admin/ingredients/delete/<%= i._id %>" onclick="return confirm('Delete this ingredient?');" class="delete-btn">❌ Delete</a>
+            </li>
+          <% }) %>
+        </ul>
+      <% } %>
+    </div>
+
+    <a href="/admin" class="back-link">← Back to Dashboard</a>
+  </div>
+</body>
+</html>
