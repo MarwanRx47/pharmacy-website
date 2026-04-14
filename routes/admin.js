@@ -16,7 +16,18 @@ const isAdmin = (req, res, next) => {
 // Admin dashboard
 router.get('/', isAdmin, async (req, res) => {
   const products = await Product.find().populate('brand');
-  res.render('admin/dashboard', { products });
+  const brands = await Brand.find();
+  res.render('admin/dashboard', { products, brands });
+});
+
+// Filter products for admin
+router.get('/products/filter', isAdmin, async (req, res) => {
+  let query = {};
+  if (req.query.name) query.name = { $regex: req.query.name, $options: 'i' };
+  if (req.query.category) query.category = req.query.category;
+  if (req.query.brand) query.brand = req.query.brand;
+  const products = await Product.find(query).populate('brand');
+  res.json(products);
 });
 
 // Show add product form
@@ -124,6 +135,28 @@ router.post('/brands/add', isAdmin, async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).send('Error adding brand');
+  }
+});
+
+router.get('/brands/edit/:id', isAdmin, async (req, res) => {
+  try {
+    const brand = await Brand.findById(req.params.id);
+    if (!brand) return res.status(404).send('Brand not found');
+    res.render('admin/edit-brand', { brand });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error loading brand');
+  }
+});
+
+router.post('/brands/edit/:id', isAdmin, async (req, res) => {
+  try {
+    const { name, description, discountPercent } = req.body;
+    await Brand.findByIdAndUpdate(req.params.id, { name, description, discountPercent: discountPercent || 0 });
+    res.redirect('/admin/brands');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error updating brand');
   }
 });
 

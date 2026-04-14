@@ -19,7 +19,23 @@
     <a href="/auth/logout" class="btn" style="width: auto; background: #ef4444;">🚪 Logout</a>
   </div>
   <h2>Products List</h2>
-  <table class="admin-table">
+  <h3>Filter Products</h3>
+  <form id="adminFilterForm" style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem;">
+    <input type="text" id="filterName" placeholder="Product name" style="flex:1; padding:0.5rem; border-radius:0.5rem; border:1px solid #ccc;">
+    <select id="filterCategory" style="padding:0.5rem; border-radius:0.5rem; border:1px solid #ccc;">
+      <option value="">All Categories</option>
+      <option value="cosmetic">Cosmetic</option>
+      <option value="supplement">Supplement</option>
+    </select>
+    <select id="filterBrand" style="padding:0.5rem; border-radius:0.5rem; border:1px solid #ccc;">
+      <option value="">All Brands</option>
+      <% brands.forEach(b => { %>
+        <option value="<%= b._id %>"><%= b.name %></option>
+      <% }) %>
+    </select>
+    <button type="button" id="applyAdminFilter" class="btn" style="width:auto;">Filter</button>
+  </form>
+  <table id="productsTable" class="admin-table">
     <thead>
       <tr><th>Name</th><th>Brand</th><th>Price</th><th>Stock</th><th>Category</th><th>Actions</th></tr>
     </thead>
@@ -38,5 +54,30 @@
   </table>
 </div>
   <%- include('../partials/footer') %>
+<script>
+  document.getElementById('applyAdminFilter').addEventListener('click', async () => {
+    const name = document.getElementById('filterName').value;
+    const category = document.getElementById('filterCategory').value;
+    const brand = document.getElementById('filterBrand').value;
+    let url = '/admin/products/filter?';
+    if (name) url += `name=${encodeURIComponent(name)}&`;
+    if (category) url += `category=${category}&`;
+    if (brand) url += `brand=${brand}&`;
+    const res = await fetch(url);
+    const products = await res.json();
+    // Re-render table tbody
+    const tbody = document.querySelector('#productsTable tbody');
+    tbody.innerHTML = products.map(p => `
+      <tr>
+        <td>${p.name}</td>
+        <td>${p.brand.name}</td>
+        <td>${p.price} IQD</td>
+        <td>${p.stock}</td>
+        <td>${p.category}</td>
+        <td><a href="/admin/edit-product/${p._id}" style="color:#2563eb;">Edit</a></td>
+      </tr>
+    `).join('');
+  });
+</script>
 </body>
 </html>

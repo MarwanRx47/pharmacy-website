@@ -78,7 +78,10 @@
                 <% if (b.discountPercent > 0) { %><span style="color: #10b981; font-weight: bold;"> (<%= b.discountPercent %>% discount)</span><% } %>
                 <% if (b.description) { %><br><small style="color: #666;"><%= b.description %></small><% } %>
               </div>
-              <a href="/admin/brands/delete/<%= b._id %>" onclick="return confirm('Delete this brand?');" class="delete-btn">❌ Delete</a>
+              <div style="display: flex; gap: 0.5rem;">
+                <a href="/admin/brands/edit/<%= b._id %>" style="color: #2563eb; text-decoration: none;">✏️ Edit</a>
+                <a href="/admin/brands/delete/<%= b._id %>" onclick="return confirm('Delete this brand?');" class="delete-btn">❌ Delete</a>
+              </div>
             </li>
           <% }) %>
         </ul>

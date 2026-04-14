@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Brand | Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    form input, form textarea {
+      width: 100%;
+      margin-bottom: 1rem;
+      padding: 0.6rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 0.5rem;
+      font-family: inherit;
+    }
+  </style>
+</head>
+<body>
+  <%- include('../partials/header') %>
+<div class="glass-container admin-container">
+  <h1>✏️ Edit Brand</h1>
+  <form action="/admin/brands/edit/<%= brand._id %>" method="POST" style="max-width: 600px;">
+    <input type="text" name="name" value="<%= brand.name %>" placeholder="Brand name" required>
+    <textarea name="description" placeholder="Description"><%= brand.description || '' %></textarea>
+    <input type="number" name="discountPercent" value="<%= brand.discountPercent || 0 %>" placeholder="Discount % (0-100)" step="1" min="0" max="100">
+    <button type="submit" style="background: #10b981;">✅ Update Brand</button>
+  </form>
+  <div style="margin-top: 1rem;">
+    <a href="/admin/brands" class="btn" style="width: auto; display: inline-block;">← Back</a>
+  </div>
+</div>
+  <%- include('../partials/footer') %>
+</body>
+</html>

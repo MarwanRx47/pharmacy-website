@@ -40,7 +40,7 @@
         <option value="cosmetic" <%= product.category === 'cosmetic' ? 'selected' : '' %>>Cosmetic</option>
         <option value="supplement" <%= product.category === 'supplement' ? 'selected' : '' %>>Supplement</option>
       </select>
-      <input type="number" name="price" value="<%= product.price %>" required placeholder="Price (IQD)">
+      <input type="number" name="price" step="any" value="<%= product.price %>" required placeholder="Price in IQD">
       <input type="number" name="discountPercent" value="<%= product.discountPercent || 0 %>" placeholder="Discount % (0-100)" step="1" min="0" max="100">
       <input type="number" name="stock" value="<%= product.stock %>" placeholder="Stock">
       <textarea name="description" placeholder="Description"><%= product.description %></textarea>
