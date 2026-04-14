@@ -17,11 +17,11 @@
     
     <div class="pickup-time">
       <label>📅 <%= t('select_pickup_time') %></label>
-      <input type="datetime-local" id="pickupTime" required style="width: 100%; margin-top: 0.5rem;">
+      <input type="datetime-local" id="pickupTime" required>
     </div>
     <div class="phone-input" style="margin-top: 1rem;">
       <label>📞 <%= t('phone_required') %></label>
-      <input type="tel" id="phoneNumber" required placeholder="e.g., 555-123-4567" style="width:100%; margin-top:0.5rem; padding:0.6rem;">
+      <input type="tel" id="phoneNumber" required placeholder="<%= t('phone_placeholder') %>">
     </div>
     <div class="discount-section" style="margin-top: 1rem;">
       <label>🎟️ <%= t('discount_code') %></label>

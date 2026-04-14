@@ -64,5 +64,6 @@
   "completed": "مكتمل",
   "total_amount": "الإجمالي",
   "phone": "الهاتف",
-  "no_orders": "لم تقم بتقديم أي طلبات بعد."
+  "no_orders": "لم تقم بتقديم أي طلبات بعد.",
+  "phone_placeholder": "رقم هاتفك"
 }

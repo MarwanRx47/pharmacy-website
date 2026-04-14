@@ -601,3 +601,121 @@ body[dir="rtl"] .glass-container {
   }
 }
 
+/* ===== DARK MODE TEXT CONTRAST FIXES ===== */
+
+/* Cart page */
+body.dark .cart-item {
+  color: var(--text-primary);
+  border-bottom-color: rgba(255,255,255,0.1);
+}
+body.dark .pickup-time label,
+body.dark .pickup-time input,
+body.dark .pickup-time button {
+  color: var(--text-primary);
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.2);
+}
+body.dark .cart-item strong {
+  color: var(--text-primary);
+}
+
+/* Login & Register pages */
+body.dark input[type="email"],
+body.dark input[type="password"],
+body.dark input[type="text"],
+body.dark input[type="tel"],
+body.dark input[type="datetime-local"],
+body.dark select,
+body.dark textarea {
+  background: rgba(255,255,255,0.1);
+  color: var(--text-primary);
+  border: 1px solid rgba(255,255,255,0.2);
+}
+body.dark input::placeholder,
+body.dark textarea::placeholder {
+  color: rgba(255,255,255,0.5);
+}
+body.dark a {
+  color: #60a5fa;
+}
+body.dark a:hover {
+  color: #93c5fd;
+}
+
+/* Admin pages tables */
+body.dark .admin-table td,
+body.dark .admin-table th {
+  color: var(--text-primary);
+  border-bottom-color: rgba(255,255,255,0.1);
+}
+body.dark .admin-table tr:hover {
+  background: rgba(255,255,255,0.05);
+}
+
+/* Footer links */
+body.dark .footer a {
+  color: #cbd5e1;
+}
+body.dark .footer a:hover {
+  color: #60a5fa;
+}
+
+/* Cart page labels & discount section */
+body.dark .pickup-time label,
+body.dark .pickup-time .discount-label,
+body.dark #discountMessage,
+body.dark .cart-item .price,
+body.dark .cart-item strong {
+  color: var(--text-primary);
+}
+
+/* Login / Register helper texts */
+body.dark form p,
+body.dark form p a {
+  color: var(--text-secondary);
+}
+body.dark form p a:hover {
+  color: #60a5fa;
+}
+
+/* Phone input label and discount code label */
+body.dark label[for="phone"],
+body.dark .discount-code-label {
+  color: var(--text-primary);
+}
+
+/* RTL input placeholder alignment */
+body[dir="rtl"] input,
+body[dir="rtl"] textarea,
+body[dir="rtl"] select {
+  text-align: right;
+}
+
+body[dir="rtl"] input::placeholder,
+body[dir="rtl"] textarea::placeholder {
+  text-align: right;
+}
+
+/* Larger input fields */
+.pickup-time input,
+.pickup-time input[type="tel"],
+.pickup-time input[type="datetime-local"] {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  font-size: 1rem;
+  border-radius: 2rem;
+  border: 1px solid rgba(0,0,0,0.1);
+  background: rgba(255,255,255,0.8);
+  transition: all 0.2s;
+}
+body.dark .pickup-time input {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.2);
+  color: var(--text-primary);
+}
+.pickup-time input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59,130,246,0.3);
+}
+

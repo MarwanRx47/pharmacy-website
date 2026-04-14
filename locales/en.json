@@ -64,5 +64,6 @@
   "completed": "Completed",
   "total_amount": "Total",
   "phone": "Phone",
-  "no_orders": "You haven't placed any orders yet."
+  "no_orders": "You haven't placed any orders yet.",
+  "phone_placeholder": "Your phone number"
 }

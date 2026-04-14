@@ -194,38 +194,76 @@
     }
   }
 
+  // Dark mode with spreading animation from button
   function initDarkMode() {
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     let stored = localStorage.getItem('darkMode');
-    if (stored === null) {
-      stored = prefersDark ? 'enabled' : 'disabled';
-    }
-    const toggle = document.getElementById('darkModeToggle');
+    if (stored === null) stored = prefersDark ? 'enabled' : 'disabled';
     if (stored === 'enabled') {
       document.body.classList.add('dark');
-      if (toggle) toggle.textContent = '☀️';
+      const btn = document.getElementById('darkModeToggle');
+      if (btn) btn.textContent = '☀️';
     } else {
       document.body.classList.remove('dark');
-      if (toggle) toggle.textContent = '🌙';
+      const btn = document.getElementById('darkModeToggle');
+      if (btn) btn.textContent = '🌙';
     }
   }
 
-  function toggleDarkMode() {
-    const toggle = document.getElementById('darkModeToggle');
+  function toggleDarkMode(e) {
+    const button = document.getElementById('darkModeToggle');
+    if (!button) return;
+    const rect = button.getBoundingClientRect();
+    const x = rect.left + rect.width / 2;
+    const y = rect.top + rect.height / 2;
+
+    const overlay = document.createElement('div');
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100%';
+    overlay.style.height = '100%';
+    overlay.style.backgroundColor = document.body.classList.contains('dark')
+      ? 'rgba(255,255,255,0.15)'
+      : 'rgba(0,0,0,0.15)';
+    overlay.style.pointerEvents = 'none';
+    overlay.style.zIndex = '9999';
+    overlay.style.transition = 'transform 0.4s ease-out, opacity 0.3s';
+    overlay.style.transformOrigin = `${x}px ${y}px`;
+    overlay.style.transform = 'scale(0)';
+    overlay.style.borderRadius = '50%';
+    document.body.appendChild(overlay);
+
+    requestAnimationFrame(() => {
+      overlay.style.transform = 'scale(100)';
+      overlay.style.opacity = '0';
+    });
+
+    setTimeout(() => overlay.remove(), 500);
+
+    // Toggle mode
     if (document.body.classList.contains('dark')) {
       document.body.classList.remove('dark');
       localStorage.setItem('darkMode', 'disabled');
-      if (toggle) toggle.textContent = '🌙';
+      button.textContent = '🌙';
     } else {
       document.body.classList.add('dark');
       localStorage.setItem('darkMode', 'enabled');
-      if (toggle) toggle.textContent = '☀️';
+      button.textContent = '☀️';
     }
   }
 
-  document.getElementById('darkModeToggle')?.addEventListener('click', toggleDarkMode);
+  // Wait for DOM to load before attaching event
+  document.addEventListener('DOMContentLoaded', () => {
+    const toggleBtn = document.getElementById('darkModeToggle');
+    if (toggleBtn) {
+      toggleBtn.removeEventListener('click', toggleDarkMode); // avoid duplicates
+      toggleBtn.addEventListener('click', toggleDarkMode);
+    }
+    initDarkMode();
+  });
+
   window.addEventListener('resize', debounce(initFilterCollapse, 150));
-  initDarkMode();
   initFilterCollapse();
 
   // Load filters then initial fetch
