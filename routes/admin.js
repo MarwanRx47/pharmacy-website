@@ -29,7 +29,7 @@ router.get('/add-product', isAdmin, async (req, res) => {
 // Handle add product POST
 router.post('/add-product', isAdmin, upload.single('image'), async (req, res) => {
   try {
-    const { name, brand, category, price, stock, description, ingredients } = req.body;
+    const { name, brand, category, price, stock, description, ingredients, discountPercent } = req.body;
     const newProduct = new Product({
       name,
       brand,
@@ -38,7 +38,8 @@ router.post('/add-product', isAdmin, upload.single('image'), async (req, res) =>
       stock,
       description,
       ingredients: Array.isArray(ingredients) ? ingredients : [ingredients],
-      imageUrl: req.file ? '/uploads/' + req.file.filename : ''
+      imageUrl: req.file ? '/uploads/' + req.file.filename : '',
+      discountPercent: discountPercent || 0
     });
     await newProduct.save();
     res.redirect('/admin');
@@ -59,7 +60,7 @@ router.get('/edit-product/:id', isAdmin, async (req, res) => {
 // Handle edit product POST (with image upload)
 router.post('/edit-product/:id', isAdmin, upload.single('image'), async (req, res) => {
   try {
-    const { name, brand, category, price, stock, description, ingredients, removeImage } = req.body;
+    const { name, brand, category, price, stock, description, ingredients, removeImage, discountPercent } = req.body;
     const updateData = {
       name,
       brand,
@@ -67,7 +68,8 @@ router.post('/edit-product/:id', isAdmin, upload.single('image'), async (req, re
       price,
       stock,
       description,
-      ingredients: Array.isArray(ingredients) ? ingredients : [ingredients]
+      ingredients: Array.isArray(ingredients) ? ingredients : [ingredients],
+      discountPercent: discountPercent || 0
     };
     if (req.file) {
       updateData.imageUrl = '/uploads/' + req.file.filename;
@@ -116,8 +118,8 @@ router.get('/brands', isAdmin, async (req, res) => {
 
 router.post('/brands/add', isAdmin, async (req, res) => {
   try {
-    const { name, description } = req.body;
-    await Brand.create({ name, description });
+    const { name, description, discountPercent } = req.body;
+    await Brand.create({ name, description, discountPercent: discountPercent || 0 });
     res.redirect('/admin/brands');
   } catch (err) {
     console.error(err);

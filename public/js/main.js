@@ -103,12 +103,16 @@
     for (const p of products) {
       const categoryClass = p.category === 'cosmetic' ? 'cosmetic' : 'supplement';
       const categoryLabel = p.category === 'cosmetic' ? '💄 Cosmetic' : '💊 Supplement';
+      let priceHtml = `<div class="price">${p.finalPrice} IQD</div>`;
+      if (p.discountPercent > 0) {
+        priceHtml = `<div class="price"><span style="text-decoration: line-through; font-size:0.8rem;">${p.originalPrice} IQD</span> ${p.finalPrice} IQD (${p.discountPercent}% off)</div>`;
+      }
       html += `
         <div class="product-card">
           <img src="${p.imageUrl || placeholderImage}" onerror="this.onerror=null; this.src='${placeholderImage}';" loading="lazy">
           <h3>${escapeHtml(p.name)}</h3>
           <div class="brand">${escapeHtml(p.brand ? p.brand.name : 'Brand')}</div>
-          <div class="price">$${p.price}</div>
+          ${priceHtml}
           <div class="ingredients"><small>🔹 ${p.ingredients ? p.ingredients.map(i => escapeHtml(i.name)).join(', ') : ''}</small></div>
           <div class="category-badge ${categoryClass}">${categoryLabel}</div>
           <button onclick="addToCart('${p._id}')">🛒 Add to cart</button>

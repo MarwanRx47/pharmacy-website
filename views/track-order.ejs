@@ -27,13 +27,13 @@
           <% } else { %>✔️ Completed<% } %>
         </p>
         <p><strong>Pickup Time:</strong> <%= order.pickupTime.toLocaleString() %></p>
-        <p><strong>Total:</strong> $<%= order.totalAmount %></p>
+        <p><strong>Total:</strong> <%= order.totalAmount %> IQD</p>
         <p><strong>Phone:</strong> <%= order.phone %></p>
         <% if (order.discountCode) { %>
-          <p><strong>Discount:</strong> <%= order.discountCode %> (-$<%= order.discountAmount.toFixed(2) %>)</p>
+          <p><strong>Discount:</strong> <%= order.discountCode %> (-<%= order.discountAmount %> IQD)</p>
         <% } %>
         <% if (order.pointsRedeemed) { %>
-          <p><strong>Points Redeemed:</strong> $<%= order.pointsRedeemed.toFixed(2) %></p>
+          <p><strong>Points Redeemed:</strong> <%= order.pointsRedeemed %> IQD</p>
         <% } %>
         <div style="margin-top:1rem;">
           <strong>Items:</strong>

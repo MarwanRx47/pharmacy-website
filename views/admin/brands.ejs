@@ -60,6 +60,7 @@
       <form action="/admin/brands/add" method="POST" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
         <input type="text" name="name" placeholder="Brand name" required style="flex: 1; min-width: 150px; padding: 0.6rem; border-radius: 0.5rem; border: none;">
         <input type="text" name="description" placeholder="Description" style="flex: 1; min-width: 150px; padding: 0.6rem; border-radius: 0.5rem; border: none;">
+        <input type="number" name="discountPercent" placeholder="Discount %" step="1" min="0" max="100" style="width: 120px; padding: 0.6rem; border-radius: 0.5rem; border: none;">
         <button type="submit" class="btn" style="width: auto;">➕ Add Brand</button>
       </form>
     </div>
@@ -74,6 +75,7 @@
             <li>
               <div>
                 <strong><%= b.name %></strong>
+                <% if (b.discountPercent > 0) { %><span style="color: #10b981; font-weight: bold;"> (<%= b.discountPercent %>% discount)</span><% } %>
                 <% if (b.description) { %><br><small style="color: #666;"><%= b.description %></small><% } %>
               </div>
               <a href="/admin/brands/delete/<%= b._id %>" onclick="return confirm('Delete this brand?');" class="delete-btn">❌ Delete</a>

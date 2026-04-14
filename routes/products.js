@@ -5,6 +5,15 @@ const Brand = require('../models/Brand');
 const Ingredient = require('../models/Ingredient');
 const Discount = require('../models/Discount');
 
+// Helper function to calculate final price with discounts
+const getFinalPrice = (product) => {
+  const productDiscount = product.discountPercent || 0;
+  const brandDiscount = product.brand.discountPercent || 0;
+  const discount = Math.max(productDiscount, brandDiscount);
+  const final = product.price * (1 - discount / 100);
+  return { finalPrice: Math.round(final), discountPercent: discount };
+};
+
 // Home page - show all products
 router.get('/', async (req, res) => {
   try {
@@ -56,8 +65,19 @@ router.get('/api/filter', async (req, res) => {
       .limit(limit);
     const total = await Product.countDocuments(query);
     
+    // Add final price and discount info
+    const productsWithDiscount = products.map(p => {
+      const { finalPrice, discountPercent } = getFinalPrice(p);
+      return {
+        ...p.toObject(),
+        originalPrice: p.price,
+        discountPercent,
+        finalPrice
+      };
+    });
+    
     res.json({
-      products,
+      products: productsWithDiscount,
       currentPage: page,
       totalPages: Math.ceil(total / limit),
       total
@@ -128,11 +148,12 @@ router.post('/api/order', async (req, res) => {
       }
     }
 
-    // Calculate subtotal
+    // Calculate subtotal using final prices (with discounts)
     let subtotal = 0;
     for (let item of items) {
-      const product = await Product.findById(item.productId);
-      subtotal += product.price * item.quantity;
+      const product = await Product.findById(item.productId).populate('brand');
+      const { finalPrice } = getFinalPrice(product);
+      subtotal += finalPrice * item.quantity;
     }
 
     let discountAmount = 0;
@@ -248,7 +269,13 @@ router.get('/api/product/:id', async (req, res) => {
   try {
     const product = await Product.findById(req.params.id).populate('brand').populate('ingredients');
     if (!product) return res.status(404).json({ error: 'Product not found' });
-    res.json(product);
+    const { finalPrice, discountPercent } = getFinalPrice(product);
+    res.json({
+      ...product.toObject(),
+      originalPrice: product.price,
+      discountPercent,
+      finalPrice
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

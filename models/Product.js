@@ -8,7 +8,8 @@ const productSchema = new mongoose.Schema({
   stock: { type: Number, default: 0 },
   imageUrl: { type: String, default: '' },
   description: { type: String },
-  ingredients: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Ingredient' }]
+  ingredients: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Ingredient' }],
+  discountPercent: { type: Number, default: 0, min: 0, max: 100 }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Product', productSchema);

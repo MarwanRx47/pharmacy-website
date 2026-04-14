@@ -33,7 +33,8 @@
       <option value="cosmetic">Cosmetic</option>
       <option value="supplement">Supplement</option>
     </select>
-    <input type="number" name="price" placeholder="Price" required>
+    <input type="number" name="price" placeholder="Price (IQD)" required>
+    <input type="number" name="discountPercent" placeholder="Discount % (0-100)" step="1" min="0" max="100">
     <input type="number" name="stock" placeholder="Stock">
     <textarea name="description" placeholder="Description"></textarea>
     <select name="ingredients" multiple>

@@ -4,7 +4,7 @@
       <img src="<%= p.imageUrl || '/images/placeholder.jpg' %>" alt="<%= p.name %>">
       <h3><%= p.name %></h3>
       <p>Brand: <%= p.brand?.name || 'Unknown' %></p>
-      <p>Price: $<%= p.price %></p>
+      <p>Price: <%= p.price %> IQD</p>
       <p>Ingredients: <%= p.ingredients?.map(i => i.name).join(', ') || 'None' %></p>
       <button type="button" onclick="addToCart('<%= p._id %>')">Add to Cart</button>
     </div>

@@ -88,9 +88,13 @@ async function loadCart() {
 function renderCart() {
   let html = '<div class="cart-items-list">';
   productsDetails.forEach(p => {
+    let priceDisplay = `${p.finalPrice} IQD`;
+    if (p.discountPercent > 0) {
+      priceDisplay = `<span style="text-decoration: line-through; font-size:0.8rem;">${p.originalPrice} IQD</span> ${p.finalPrice} IQD (${p.discountPercent}% off)`;
+    }
     html += `
       <div class="cart-item">
-        <div><strong>${escapeHtml(p.name)}</strong> - $${p.price.toFixed(2)}</div>
+        <div><strong>${escapeHtml(p.name)}</strong> - ${priceDisplay}</div>
         <div>
           <button class="qty-btn" data-id="${p._id}" data-delta="-1">-</button>
           <span id="qty-${p._id}">${p.cartQuantity}</span>
@@ -207,12 +211,12 @@ async function fetchUserPoints() {
 }
 
 function calculateTotals() {
-  subtotal = productsDetails.reduce((sum, p) => sum + (p.price * p.cartQuantity), 0);
+  subtotal = productsDetails.reduce((sum, p) => sum + (p.finalPrice * p.cartQuantity), 0);
   const subtotalElem = document.getElementById('orderSubtotal');
-  if (subtotalElem) subtotalElem.innerText = `$${subtotal.toFixed(2)}`;
+  if (subtotalElem) subtotalElem.innerText = `${subtotal} IQD`;
 
   const discountElem = document.getElementById('orderDiscount');
-  if (discountElem) discountElem.innerText = `$${discountAmount.toFixed(2)}`;
+  if (discountElem) discountElem.innerText = `${discountAmount} IQD`;
 
   if (usePoints) {
     const maxPointsRedeemable = Math.floor(userPoints / 100);
@@ -223,10 +227,10 @@ function calculateTotals() {
   }
 
   const pointsElem = document.getElementById('orderPoints');
-  if (pointsElem) pointsElem.innerText = `$${pointsReduction.toFixed(2)}`;
+  if (pointsElem) pointsElem.innerText = `${pointsReduction} IQD`;
 
   const totalElem = document.getElementById('orderTotal');
-  if (totalElem) totalElem.innerText = `$${(subtotal - discountAmount - pointsReduction).toFixed(2)}`;
+  if (totalElem) totalElem.innerText = `${(subtotal - discountAmount - pointsReduction)} IQD`;
 }
 
 function resetTotals() {
@@ -234,13 +238,13 @@ function resetTotals() {
   discountAmount = 0;
   pointsReduction = 0;
   const subtotalElem = document.getElementById('orderSubtotal');
-  if (subtotalElem) subtotalElem.innerText = '$0.00';
+  if (subtotalElem) subtotalElem.innerText = '0 IQD';
   const discountElem = document.getElementById('orderDiscount');
-  if (discountElem) discountElem.innerText = '$0.00';
+  if (discountElem) discountElem.innerText = '0 IQD';
   const pointsElem = document.getElementById('orderPoints');
-  if (pointsElem) pointsElem.innerText = '$0.00';
+  if (pointsElem) pointsElem.innerText = '0 IQD';
   const totalElem = document.getElementById('orderTotal');
-  if (totalElem) totalElem.innerText = '$0.00';
+  if (totalElem) totalElem.innerText = '0 IQD';
 }
 
 async function applyDiscount() {
