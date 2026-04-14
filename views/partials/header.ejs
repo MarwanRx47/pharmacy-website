@@ -22,6 +22,7 @@
       <a href="/auth/login">🔐 <%= t('login') %></a>
       <a href="/auth/register">📝 <%= t('register') %></a>
     <% } %>
+    <button id="darkModeToggle" style="background: none; border: none; font-size: 1.2rem; cursor: pointer; width: auto;">🌙</button>
     <div class="lang-switcher">
       <select id="langSelect">
         <option value="en" <%= lang === 'en' ? 'selected' : '' %>>English</option>

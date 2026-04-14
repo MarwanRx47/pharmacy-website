@@ -176,6 +176,54 @@
     });
   }
 
+  function initFilterCollapse() {
+    const filterContent = document.querySelector('.filter-content');
+    const toggleIcon = document.querySelector('.toggle-icon');
+    if (!filterContent) return;
+    const isMobile = window.innerWidth < 768;
+    if (isMobile) {
+      filterContent.style.display = 'none';
+      if (toggleIcon) toggleIcon.textContent = '▲';
+    } else {
+      filterContent.style.display = 'block';
+      if (toggleIcon) toggleIcon.textContent = '▼';
+    }
+  }
+
+  function initDarkMode() {
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    let stored = localStorage.getItem('darkMode');
+    if (stored === null) {
+      stored = prefersDark ? 'enabled' : 'disabled';
+    }
+    const toggle = document.getElementById('darkModeToggle');
+    if (stored === 'enabled') {
+      document.body.classList.add('dark');
+      if (toggle) toggle.textContent = '☀️';
+    } else {
+      document.body.classList.remove('dark');
+      if (toggle) toggle.textContent = '🌙';
+    }
+  }
+
+  function toggleDarkMode() {
+    const toggle = document.getElementById('darkModeToggle');
+    if (document.body.classList.contains('dark')) {
+      document.body.classList.remove('dark');
+      localStorage.setItem('darkMode', 'disabled');
+      if (toggle) toggle.textContent = '🌙';
+    } else {
+      document.body.classList.add('dark');
+      localStorage.setItem('darkMode', 'enabled');
+      if (toggle) toggle.textContent = '☀️';
+    }
+  }
+
+  document.getElementById('darkModeToggle')?.addEventListener('click', toggleDarkMode);
+  window.addEventListener('resize', debounce(initFilterCollapse, 150));
+  initDarkMode();
+  initFilterCollapse();
+
   // Load filters then initial fetch
   loadFilters().then(() => {
     fetchAndDisplayProducts();
