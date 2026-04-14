@@ -24,6 +24,15 @@ app.use(session({
 }));
 app.use(i18nMiddleware);
 
+// Set app locals for footer and other shared data
+app.locals.social = {
+  facebook: process.env.FACEBOOK_URL || 'https://facebook.com/yourpage',
+  whatsapp: process.env.WHATSAPP_URL || 'https://wa.me/1234567890',
+  telegram: process.env.TELEGRAM_URL || 'https://t.me/yourchannel',
+  phone: process.env.PHONE_NUMBER || '+123 456 7890',
+  email: process.env.EMAIL_CONTACT || 'info@4baxpharmacy.com'
+};
+
 // Make user available in all views
 app.use(async (req, res, next) => {
   if (req.session.userId) {
