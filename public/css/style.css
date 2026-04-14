@@ -24,17 +24,17 @@
 body.dark {
   --bg-gradient-start: #0f172a;
   --bg-gradient-end: #1e293b;
-  --glass-bg: rgba(15, 23, 42, 0.6);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --card-bg: rgba(30, 41, 59, 0.6);
-  --card-hover: rgba(51, 65, 85, 0.8);
-  --text-primary: #f1f5f9;
-  --text-secondary: #cbd5e1;
-  --price-color: #60a5fa;
-  --btn-bg: rgba(59, 130, 246, 0.8);
+  --glass-bg: rgba(15, 23, 42, 0.85); /* more opaque */
+  --glass-border: rgba(255, 255, 255, 0.15);
+  --card-bg: rgba(30, 41, 59, 0.9); /* solid enough */
+  --card-hover: rgba(51, 65, 85, 0.95);
+  --text-primary: #ffffff; /* pure white */
+  --text-secondary: #e2e8f0; /* very light gray */
+  --price-color: #93c5fd; /* lighter blue */
+  --btn-bg: rgba(59, 130, 246, 0.9);
   --btn-hover: #3b82f6;
-  --navbar-bg: rgba(15, 23, 42, 0.7);
-  --footer-bg: rgba(15, 23, 42, 0.7);
+  --navbar-bg: rgba(15, 23, 42, 0.9);
+  --footer-bg: rgba(15, 23, 42, 0.9);
 }
 
 body {
@@ -249,7 +249,7 @@ input[type="checkbox"] {
 
 .product-card .brand {
   font-size: 0.85rem;
-  color: #475569;
+  color: var(--text-secondary);
   flex-shrink: 0;
 }
 
@@ -263,7 +263,7 @@ input[type="checkbox"] {
 
 .product-card .ingredients {
   font-size: 0.75rem;
-  color: #334155;
+  color: var(--text-secondary);
   margin: 0.5rem 0;
   flex-grow: 1;
 }
@@ -288,6 +288,15 @@ input[type="checkbox"] {
   color: #9d174d;
 }
 
+body.dark .category-badge.cosmetic {
+  background: #fef3c7;
+  color: #b45309;
+}
+body.dark .category-badge.supplement {
+  background: #d1fae5;
+  color: #065f46;
+}
+
 .price {
   font-weight: 700;
   color: #2563eb;
@@ -308,6 +317,10 @@ button, .btn {
   font-size: 0.85rem;
   width: 100%;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+body.dark button, body.dark .btn {
+  color: white;
 }
 
 button:hover, .btn:hover {
