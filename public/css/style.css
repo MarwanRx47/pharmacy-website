@@ -103,6 +103,39 @@ input[type="checkbox"] {
   accent-color: #3b82f6;
 }
 
+/* ===== CART PAGE BUTTONS ===== */
+.cart-item button {
+  background: rgba(59, 130, 246, 0.8);
+  color: white;
+  border: none;
+  border-radius: 1.5rem;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.8rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.1s ease;
+  width: auto;
+  margin: 0 0.2rem;
+}
+
+.cart-item button:hover {
+  background: #2563eb;
+  transform: scale(0.95);
+}
+
+.cart-item .remove-btn {
+  background: #dc2626;
+}
+
+.cart-item .remove-btn:hover {
+  background: #b91c1c;
+}
+
+.cart-item span {
+  margin: 0 0.3rem;
+  font-weight: 600;
+}
+
 /* ===== PRODUCT GRID ===== */
 .product-grid {
   display: grid;

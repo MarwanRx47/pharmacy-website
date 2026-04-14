@@ -1,15 +1,9 @@
 <nav class="navbar">
   <div class="nav-brand">
     <a href="/">
-      <% if (lang === 'en') { %>
-        <span style="background: linear-gradient(135deg, #dc2626, #ef4444); -webkit-background-clip: text; background-clip: text; color: transparent; font-weight: 800;">4</span>
-        <span style="background: linear-gradient(135deg, #10b981, #34d399); -webkit-background-clip: text; background-clip: text; color: transparent; font-weight: 800;">Bax</span>
-        <span style="color: #1e293b;"> Pharmacy</span>
-      <% } else { %>
-        <span style="background: linear-gradient(135deg, #dc2626, #10b981); -webkit-background-clip: text; background-clip: text; color: transparent; font-weight: 800;">
-          <%= t('pharmacy_name') %>
-        </span>
-      <% } %>
+      <span style="background: linear-gradient(135deg, #dc2626, #10b981); -webkit-background-clip: text; background-clip: text; color: transparent; font-weight: 800;">
+        <% if (lang === 'en') { %>4Bax Pharmacy<% } else { %><%= t('pharmacy_name') %><% } %>
+      </span>
     </a>
   </div>
   <div class="nav-links">

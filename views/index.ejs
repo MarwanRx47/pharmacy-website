@@ -11,15 +11,9 @@
   <%- include('partials/header') %>
   <div class="glass-container">
     <h1>
-      <% if (lang === 'en') { %>
-        <span style="background: linear-gradient(135deg, #dc2626, #f97316); -webkit-background-clip: text; background-clip: text; color: transparent;">4</span>
-        <span style="background: linear-gradient(135deg, #10b981, #059669); -webkit-background-clip: text; background-clip: text; color: transparent;">Bax</span>
-        <span style="color: #1e293b;"> Pharmacy</span>
-      <% } else { %>
-        <span style="background: linear-gradient(135deg, #dc2626, #10b981); -webkit-background-clip: text; background-clip: text; color: transparent;">
-          <%= t('pharmacy_name') %>
-        </span>
-      <% } %>
+      <span style="background: linear-gradient(135deg, #dc2626, #10b981); -webkit-background-clip: text; background-clip: text; color: transparent; font-weight: 800;">
+        <% if (lang === 'en') { %>4Bax Pharmacy<% } else { %><%= t('pharmacy_name') %><% } %>
+      </span>
       <span style="font-size: 1rem; color: #475569; display: block; margin-top: 0.5rem;">✨ <%= t('subtitle') %></span>
     </h1>
 
