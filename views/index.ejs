@@ -11,23 +11,34 @@
   <%- include('partials/header') %>
   <div class="glass-container">
     <h1>
-      <span style="background: linear-gradient(135deg, #dc2626, #f97316); -webkit-background-clip: text; background-clip: text; color: transparent;">4</span>
-      <span style="background: linear-gradient(135deg, #10b981, #059669); -webkit-background-clip: text; background-clip: text; color: transparent;">Bax</span>
-      <span style="color: #1e293b;"> Pharmacy</span>
-      <span style="font-size: 1rem; color: #475569; display: block; margin-top: 0.5rem;">✨ <%= t('welcome') %></span>
+      <% if (lang === 'en') { %>
+        <span style="background: linear-gradient(135deg, #dc2626, #f97316); -webkit-background-clip: text; background-clip: text; color: transparent;">4</span>
+        <span style="background: linear-gradient(135deg, #10b981, #059669); -webkit-background-clip: text; background-clip: text; color: transparent;">Bax</span>
+        <span style="color: #1e293b;"> Pharmacy</span>
+      <% } else { %>
+        <span style="background: linear-gradient(135deg, #dc2626, #10b981); -webkit-background-clip: text; background-clip: text; color: transparent;">
+          <%= t('pharmacy_name') %>
+        </span>
+      <% } %>
+      <span style="font-size: 1rem; color: #475569; display: block; margin-top: 0.5rem;">✨ <%= t('subtitle') %></span>
     </h1>
-    <p style="margin-bottom: 2rem; color: #334155;"><%= t('subtitle') %></p>
 
     <div class="layout">
       <!-- Filters sidebar -->
       <aside class="filters-panel">
-        <div class="filter-group" id="brandsContainer">
-          <h3>🏷️ <%= t('brands') %></h3>
-          <!-- dynamically loaded -->
+        <div class="filter-toggle" style="cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0;">🔍 Filters</h3>
+          <span class="toggle-icon">▼</span>
         </div>
-        <div class="filter-group" id="ingredientsContainer">
-          <h3>🔬 <%= t('ingredients') %></h3>
-          <!-- dynamically loaded -->
+        <div class="filter-content" style="margin-top: 1rem;">
+          <div class="filter-group" id="brandsContainer">
+            <h3>🏷️ <%= t('brands') %></h3>
+            <!-- dynamically loaded -->
+          </div>
+          <div class="filter-group" id="ingredientsContainer">
+            <h3>🔬 <%= t('ingredients') %></h3>
+            <!-- dynamically loaded -->
+          </div>
         </div>
       </aside>
 
@@ -54,5 +65,18 @@
   </div>
 
   <script src="/js/main.js"></script>
+  <script>
+    // Collapsible filters
+    const toggle = document.querySelector('.filter-toggle');
+    const content = document.querySelector('.filter-content');
+    const icon = document.querySelector('.toggle-icon');
+    if (toggle && content) {
+      toggle.addEventListener('click', () => {
+        const isHidden = content.style.display === 'none';
+        content.style.display = isHidden ? 'block' : 'none';
+        icon.textContent = isHidden ? '▼' : '▲';
+      });
+    }
+  </script>
 </body>
 </html>

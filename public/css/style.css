@@ -79,6 +79,24 @@ h1 {
   transform: translateX(4px);
 }
 
+.filter-toggle {
+  cursor: pointer;
+  user-select: none;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.filter-toggle:hover {
+  background: rgba(255,255,255,0.2);
+  border-radius: 1rem;
+  padding: 0.5rem;
+}
+
+.toggle-icon {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
 input[type="checkbox"] {
   width: 1rem;
   height: 1rem;
